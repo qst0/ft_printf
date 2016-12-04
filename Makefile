@@ -1,26 +1,38 @@
-#Makefile by Mason
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2016/11/28 14:52:14 by myoung            #+#    #+#              #
+#    Updated: 2016/12/03 13:53:44 by myoung           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-NAME = printf_test
+NAME = libftprintf.a
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
+AR = ar
+INC = -I ./include
 
-FILES = main.c \
-		ft_printf.c
+MAIN = src/main.c
+
+FILES = guts.c ft_printf.c
 
 OBJ = $(addprefix build/, $(FILES:.c=.o))
 SRC = $(addprefix src/, $(FILES))
 
-FRAMEWORKS = -framework OpenGL -framework AppKit
-INC = -I ./include
 
 .PHONY: all clean fclean re test
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(OBJ) -o $(NAME)
-	@echo "Creating $(NAME)"
+	$(AR) crs $@ $^
+	$(CC) $@ $(MAIN) $(INC)
+	echo "Creating $(NAME)"
 
 build/%.o: src/%.c | build
 	@echo "Doing things to $@"
@@ -37,7 +49,8 @@ fclean: clean
 	@echo "Removing $(NAME)"
 	rm -f $(NAME)
 
-test: $(NAME)
-	./$(NAME)
+test:
+	make re
+	./a.out
 
 re: fclean all

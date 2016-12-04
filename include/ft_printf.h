@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 21:59:37 by myoung            #+#    #+#             */
-/*   Updated: 2016/11/25 15:31:51 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/04 02:40:03 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,19 @@
 # include <wchar.h>
 # include <stdlib.h>
 
-void		ft_printf(char *fmt, ...);
+int		ft_printf(char *fmt, ...);
+
+char 	*ft_uldtoa_base(unsigned long value, int base);
+char 	*ft_udtoa_base(long value, int base);
+int		ft_uld_len_base(unsigned long value, int base);
+int		ft_ud_len_base(unsigned int value, int base);
+char 	*ft_lldtoa_base(long long value, int base);
+int		ft_lldlen_base(long long value, int base);
+
+char 	*ft_lldtoa_base_alt(long long value, int base);
+int		ft_ulld_len_base(unsigned long long value, int base);
+char 	*ft_ulldtoa_base_alt(unsigned long long value, int base);
+char 	*ft_ulldtoa_base(unsigned long long value, int base);
 
 int				ft_nlen_base(long value, int base);
 char 			*ft_itoa_base(long value, int base);
@@ -51,6 +63,12 @@ typedef struct	s_ftoken
 	int		space:1;
 	int		sign:1;
 	int		left:1;
+	int		l:1;
+	int		ll:1;
+	int		h:1;
+	int		hh:1;
+	int		j:1;
+	int		z:1;
 	int		precision;
 	int		mfw;
 }				t_ftoken;

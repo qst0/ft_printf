@@ -6,13 +6,14 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 21:59:37 by myoung            #+#    #+#             */
-/*   Updated: 2016/11/25 15:42:29 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/03 23:56:41 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_printf.h>
 
 #include <stdio.h>
+#include <limits.h>
 
 int			main(int argc, char **argv)
 {
@@ -23,16 +24,36 @@ int			main(int argc, char **argv)
 
 	test[0] = 0x00a2;
 	test[1] = 0x23F0;
-	test[2] = 0x2648;
+	test[2] = 0x28DB6;
 	test[3] = 0;
 
 	ptr = &argc;
+
+//	printf("%d\n", printf("%x, %x", 0, UINT_MAX));
+//	printf("%x, %x", 0, UINT_MAX);
+	printf("%d\n", ft_printf("%x, %x", 0, UINT_MAX));
+	ft_printf("%x, %x", 0, UINT_MAX);
+
+/*	
+	printf("%d\n", printf("%zd", LLONG_MAX));
+	printf("%zd", LLONG_MAX);
+*/
+
+	/*
+	printf("%d\n", 42);
+	ft_printf("%d\n", 42);
+	printf("%u\n", 2147777777U);
+	ft_printf("%u\n", 2147777777U);
+	printf("%-42u\n", 2147777777U);
+	ft_printf("%-42u\n", 2147777777U);
 
 	ft_printf("%s Mr.%C  and welcome,"
 			" we made it a point %d put you in room %p\n"
 			"Here is a wstr: %S\n",
 		   	"Bonjour", 0x1F95E, 2, ptr, test);
 
+	ft_putwchar(0x28DB6);
+	
 	int i;
 	i = 0;
 	while (i < 12)
@@ -51,4 +72,5 @@ int			main(int argc, char **argv)
 	//ft_putuld(4294967296UL);
 	//ft_putlong(-9223372036854775807L);
 	ft_putchar('\n');
+	*/
 	}

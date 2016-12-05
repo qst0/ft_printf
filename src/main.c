@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 21:59:37 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/03 23:56:41 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/04 18:22:20 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,36 @@ int			main(int argc, char **argv)
 
 	ptr = &argc;
 
-//	printf("%d\n", printf("%x, %x", 0, UINT_MAX));
-//	printf("%x, %x", 0, UINT_MAX);
-	printf("%d\n", ft_printf("%x, %x", 0, UINT_MAX));
-	ft_printf("%x, %x", 0, UINT_MAX);
+
+
+	/*
+	printf("%d\n", printf("{%-10d}", 42));
+	printf("{%-10d}", 42);
+	*/
+	/*
+	printf("%d\n", ft_printf("{%-10d}", 42));
+	ft_printf("{%-10d}", 42);
+	*/
+	
+	/*
+	printf("%d\n", ft_printf("%jd", LLONG_MAX));
+	ft_printf("%jd", LLONG_MAX);
+	*/
+	
+	//printf("%d\n", printf("%hhu, %hhu", 0, UCHAR_MAX));
+	//printf("%hhu, %hhu", 0, UCHAR_MAX);
+	//printf("%d\n", ft_printf("%hhu, %hhu", 0, UCHAR_MAX));
+	//ft_printf("%hhu, %hhu", 0, UCHAR_MAX);
+	
+	//printf("%d\n", printf("%hhd", CHAR_MAX + 42));
+	//printf("%hhd", CHAR_MAX + 42);
+	//printf("%d\n", ft_printf("%hhd", CHAR_MAX + 42));
+	//ft_printf("%hhd", CHAR_MAX + 42);
+
+	//printf("%d\n", printf("%x, %x", 0, UINT_MAX));
+	//printf("%x, %x", 0, UINT_MAX);
+	//printf("%d\n", ft_printf("%x, %x", 0, UINT_MAX));
+	//ft_printf("%x, %x", 0, UINT_MAX);
 
 /*	
 	printf("%d\n", printf("%zd", LLONG_MAX));

@@ -6,11 +6,33 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/26 08:13:38 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/04 02:54:47 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/04 17:07:02 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_printf.h>
+
+int			ft_atoi(const char *str)
+{
+	int					i;
+	int					sign;
+	unsigned long long	result;
+
+	i = 0;
+	while (str[0] == '\t' || str[0] == '\n' || str[0] == '\v' ||
+			str[0] == '\f' || str[0] == ' ' || str[0] == '\r')
+		str++;
+	result = 0;
+	sign = (str[0] == '-' ? -1 : 1);
+	str = (str[0] == '-' || str[0] == '+') ? str + 1 : str;
+	while (str[0] == '0')
+		str++;
+	while (str[i] != '\0' && (str[i] >= '0' && str[i] <= '9'))
+		result = result * 10 + (str[i++] - '0');
+	if (i > 19 || result >= 9223372036854775808ULL)
+		return (sign == 1 ? -1 : 0);
+	return (result * sign);
+}
 
 int		ft_lldlen_base(long long value, int base)
 {
@@ -143,6 +165,46 @@ char 	*ft_lldtoa_base(long long value, int base)
 	}
 	if (value < 0 && base == 10)
 		result[0] = '-';
+	return (result);
+}
+
+char 	*ft_uhhdtoa_base_alt(unsigned char value, int base)
+{
+	char		hex[17] = "0123456789ABCDEF";
+	char		*result;
+	long long	n = value;
+	int			len;
+
+	if (value == 0)
+		return ("0");
+	len = ft_nlen_base(n, base);
+	result = (char*)malloc(len + 1);
+	result[len--] = '\0';
+	while (n)
+	{
+		result[len--] = hex[n % base];
+		n /= base;
+	}
+	return (result);
+}
+
+char 	*ft_uhhdtoa_base(unsigned char value, int base)
+{
+	char		hex[17] = "0123456789abcdef";
+	char		*result;
+	long long	n = value;
+	int			len;
+
+	if (value == 0)
+		return ("0");
+	len = ft_nlen_base(n, base);
+	result = (char*)malloc(len + 1);
+	result[len--] = '\0';
+	while (n)
+	{
+		result[len--] = hex[n % base];
+		n /= base;
+	}
 	return (result);
 }
 
@@ -387,6 +449,40 @@ void	ft_putnbr(int n)
 		ft_putchar('0');
 	else
 		ft_putnbr_r(n);
+}
+
+void	ft_puthhd_r(signed char n)
+{
+	if (n)
+		ft_puthhd_r(n / 10);
+	if (n)
+		ft_putchar((n % 10) * (n < 0 ? -1 : 1) + '0');
+}
+
+void	ft_puthhd(signed char n)
+{
+	if (n < 0)
+		ft_putchar('-');
+	if (n == 0)
+		ft_putchar('0');
+	else
+		ft_puthhd_r(n);
+}
+
+void	ft_putuhhd_r(unsigned char n)
+{
+	if (n)
+		ft_putuhhd_r(n / 10);
+	if (n)
+		ft_putchar((n % 10) + '0');
+}
+
+void	ft_putuhhd(unsigned char n)
+{
+	if (n == 0)
+		ft_putchar('0');
+	else
+		ft_putuhhd_r(n);
 }
 
 void	ft_putulld_r(unsigned long long ulld)

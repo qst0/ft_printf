@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 21:59:37 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/04 02:40:03 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/04 17:44:45 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@ int		ft_ud_len_base(unsigned int value, int base);
 char 	*ft_lldtoa_base(long long value, int base);
 int		ft_lldlen_base(long long value, int base);
 
+int			ft_atoi(const char *str);
+char 	*ft_uhhdtoa_base_alt(unsigned char value, int base);
+char 	*ft_uhhdtoa_base(unsigned char value, int base);
+void	ft_putuhhd_r(unsigned char n);
+void	ft_putuhhd(unsigned char n);
+void	ft_puthhd(signed char n);
+void	ft_puthhd_r(signed char n);
 char 	*ft_lldtoa_base_alt(long long value, int base);
 int		ft_ulld_len_base(unsigned long long value, int base);
 char 	*ft_ulldtoa_base_alt(unsigned long long value, int base);
@@ -71,6 +78,7 @@ typedef struct	s_ftoken
 	int		z:1;
 	int		precision;
 	int		mfw;
+	int		cur_len;
 }				t_ftoken;
 
 union u_format
@@ -80,6 +88,7 @@ union u_format
 	unsigned char		uc;
 	wchar_t				wc;
 	char				c;
+	signed char			sc;
 	unsigned int		ud;
 	unsigned long		ul;
 	unsigned long long	ull;

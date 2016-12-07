@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 21:59:37 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/04 17:44:45 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/07 01:19:51 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,18 @@
 
 int		ft_printf(char *fmt, ...);
 
+char 	*ft_uldtoa_base_alt(unsigned long value, int base);
 char 	*ft_uldtoa_base(unsigned long value, int base);
+char 	*ft_udtoa_base_alt(long value, int base);
 char 	*ft_udtoa_base(long value, int base);
 int		ft_uld_len_base(unsigned long value, int base);
 int		ft_ud_len_base(unsigned int value, int base);
 char 	*ft_lldtoa_base(long long value, int base);
 int		ft_lldlen_base(long long value, int base);
+
+int			ft_wstr_len(wchar_t *ws);
+int			ft_wchar_len(wchar_t wc);
+int		ft_putchar_times(int c, int times);
 
 int			ft_atoi(const char *str);
 char 	*ft_uhhdtoa_base_alt(unsigned char value, int base);

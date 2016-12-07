@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/26 08:13:38 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/04 17:07:02 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/07 14:52:55 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,26 @@ char 	*ft_ulldtoa_base(unsigned long long value, int base)
 	if (value == 0)
 		return ("0");
 	len = ft_ulld_len_base(n, base);
+	result = (char*)malloc(len + 1);
+	result[len--] = '\0';
+	while (n)
+	{
+		result[len--] = hex[n % base];
+		n /= base;
+	}
+	return (result);
+}
+
+char 	*ft_uldtoa_base_alt(unsigned long value, int base)
+{
+	char		hex[17] = "0123456789ABCDEF";
+	char		*result;
+	unsigned long long	n = value;
+	int			len;
+
+	if (value == 0)
+		return ("0");
+	len = ft_uld_len_base(n, base);
 	result = (char*)malloc(len + 1);
 	result[len--] = '\0';
 	while (n)
@@ -253,6 +273,26 @@ int		ft_ud_len_base(unsigned int value, int base)
 	return (len);
 }
 
+char 	*ft_udtoa_base_alt(long value, int base)
+{
+	char	hex[17] = "0123456789ABCDEF";
+	char	*result;
+	long	n = value;
+	int 	len;
+
+	if (value == 0)
+		return ("0");
+	len = ft_ud_len_base(n, base);
+	result = (char*)malloc(len + 1);
+	result[len--] = '\0';
+	while (n)
+	{
+		result[len--] = hex[n % base];
+		n /= base;
+	}
+	return (result);
+}
+
 char 	*ft_udtoa_base(long value, int base)
 {
 	char	hex[17] = "0123456789abcdef";
@@ -325,6 +365,19 @@ void	ft_putstr(char *str)
 	write(1, str, ft_strlen(str));
 }
 
+int		ft_putchar_times(int c, int times)
+{
+	int i;
+
+	i = 0;
+	while (i < times)
+	{
+		write(1, &c, 1);
+		i++;
+	}
+	return (times);
+}
+
 void	ft_putchar(int c)
 {
 	write(1, &c, 1);
@@ -384,10 +437,41 @@ int			ft_putwchar(wchar_t wc)
 		return (ft_put4bytes(wc));
 }
 
-int			ft_putwstr(wchar_t *ws)
+int			ft_wchar_len(wchar_t wc)
+{
+	unsigned int ud;
+
+	ud = (unsigned int)wc;
+	if (ud <= 127)
+		return (1);
+	else if (ud <= 2047)
+		return (2);
+	else if (ud <= 65535)
+		return (3);
+	else
+		return (4);
+}
+
+int			ft_wstr_len(wchar_t *ws)
 {
 	int len;
 
+	len = 0;
+	if (!ws)
+		return (ft_strlen("(null)"));
+	while (*ws)
+	{
+		len += ft_wchar_len(*ws);
+		ws++;
+	}
+	return (len);
+}
+
+int			ft_putwstr(wchar_t *ws)
+{
+	int len;
+	if(!ws)
+		return (ft_printf("(null)"));
 	len = 0;
 	while (*ws)
 	{

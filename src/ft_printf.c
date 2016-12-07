@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/25 15:25:11 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/04 17:56:30 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/07 14:52:39 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	ft_ftoken_reset(t_ftoken *ftoken)
 	ftoken->z = 0;
 	ftoken->cur_len = 0;
 	ftoken->mfw = 0;
+	ftoken->precision = 0;
 }
 
 int		ft_printf(char *fmt, ...)
@@ -156,13 +157,19 @@ int		ft_printf(char *fmt, ...)
 				{
 					f.d = va_arg(ap, int);
 					ftoken.cur_len = ft_nlen_base(f.d, 10);
+					if (ftoken.left)
+						ft_putnbr(f.d);
 					while (ftoken.cur_len < ftoken.mfw)
 					{
-						ft_putchar(' ');
+						if (ftoken.zero)
+							ft_putchar('0');
+						else
+							ft_putchar(' ');
 						ftoken.cur_len++;
 					}
 					len += ftoken.cur_len;
-					ft_putnbr(f.d);
+					if (!ftoken.left)
+						ft_putnbr(f.d);
 				}
 			}
 			else if (*fmt == 'D')
@@ -171,6 +178,28 @@ int		ft_printf(char *fmt, ...)
 				f.ld = va_arg(ap, long);
 				len += ft_lldlen_base(f.ld, 10);
 				ft_putlong(f.ld);
+			}
+			else if (*fmt == 'o' && ftoken.alt)
+			{
+				fmt++;
+				if (ftoken.l || ftoken.z || ftoken.ll || ftoken.j)
+				{
+					f.ul = va_arg(ap, unsigned long);
+					len += ft_uld_len_base(f.ul, 8);
+					ft_putstr(ft_uldtoa_base_alt(f.ul, 8));
+				}
+				else if (ftoken.hh)
+				{
+					f.uc = va_arg(ap, unsigned int);
+					len += ft_nlen_base(f.uc, 8);
+					ft_putstr(ft_uhhdtoa_base_alt(f.uc, 8));
+				}
+				else
+				{
+					f.ud = va_arg(ap, unsigned int);
+					len += ft_ud_len_base(f.ud, 8);
+					ft_putstr(ft_udtoa_base_alt(f.ud, 8));
+				}
 			}
 			else if (*fmt == 'o')
 			{
@@ -205,15 +234,15 @@ int		ft_printf(char *fmt, ...)
 			{	
 				fmt++;
 				f.ld = va_arg(ap, long);
-				ft_putstr("0x");
-				len += ft_lldlen_base(f.ld, 16) + 2;
-				ft_putstr(ft_itoa_base(f.ld, 16));
-			}
-			else if (*fmt == '%')
-			{	
-				fmt++;
-				write(1, "%", 1);
-				len++;
+				ftoken.cur_len = ft_lldlen_base(f.ld, 16) + 2;
+				if (ftoken.left)
+					ft_printf("0x%s",ft_itoa_base(f.ld, 16));
+				ft_putchar_times(' ', ftoken.mfw - ftoken.cur_len);
+				while (ftoken.cur_len < ftoken.mfw)
+					ftoken.cur_len++;
+				if (!ftoken.left)
+					ft_printf("0x%s",ft_itoa_base(f.ld, 16));
+				len += ftoken.cur_len;
 			}
 			else if (*fmt == 's')
 			{
@@ -221,10 +250,7 @@ int		ft_printf(char *fmt, ...)
 				if (ftoken.l)
 				{
 					f.ws = va_arg(ap, wchar_t*);
-					if (f.ws)
-						len += ft_putwstr(f.ws);
-					else
-						len += ft_printf("(null)");
+					len += ft_putwstr(f.ws);
 				}
 				else
 				{
@@ -242,10 +268,17 @@ int		ft_printf(char *fmt, ...)
 			{
 				fmt++;
 				f.ws = va_arg(ap, wchar_t*);
-				if (f.ws)
-					len += ft_putwstr(f.ws);
-				else
-					len += ft_printf("(null)");
+				ftoken.cur_len = ft_wstr_len(f.ws);
+				if (ftoken.left)
+					ft_putwstr(f.ws);
+				while (ftoken.cur_len < ftoken.mfw)
+				{
+					ft_putchar(' ');
+					ftoken.cur_len++;
+				}
+				if (!ftoken.left)
+					ft_putwstr(f.ws);
+				len += ftoken.cur_len;
 			}
 			else if (*fmt == 'u')
 			{
@@ -300,13 +333,23 @@ int		ft_printf(char *fmt, ...)
 					f.uc = va_arg(ap, unsigned int);
 					len += ft_nlen_base(f.uc, 16);
 					ft_putstr(ft_uhhdtoa_base_alt(f.uc, 16));
-				}
-				else
+				} else
 				{
 					f.ull = va_arg(ap, unsigned long long);
 					len += ft_ulld_len_base(f.ull, 16);
 					ft_putstr(ft_ulldtoa_base_alt(f.ull, 16));
 				}
+			}
+			else if (*fmt == '%')
+			{	
+				fmt++;
+				write(1, "%", 1);
+				len++;
+			}
+			while (!ftoken.left && ftoken.mfw > len)
+			{
+				ft_putchar(' ');
+				len++;
 			}
 		}
 			else
@@ -314,6 +357,11 @@ int		ft_printf(char *fmt, ...)
 			write(1, fmt, 1);
 			len++;
 			fmt++;
+			while (ftoken.left && len <= ftoken.mfw)
+			{
+				ft_putchar(' ');
+				len++;
+			}
 		}
 	}
 	return(len);

@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/25 15:25:11 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/07 14:52:39 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/07 20:49:04 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,7 @@ int		ft_printf(char *fmt, ...)
 		if (*fmt == '%')
 		{	
 			fmt++;
-			// FIND THE FLAGS
-			while (*fmt == '#' 
-					|| *fmt == '-'
-					|| *fmt == '+'
-					|| *fmt == '0'
-					|| *fmt == ' ')
-			{
-				if (*fmt == '#')
-					ftoken.alt = 1;
-				if (*fmt == '-')
-					ftoken.left = 1;
-				if (*fmt == '+')
-					ftoken.sign = 1;
-				if (*fmt == ' ')
-					ftoken.space = 1;
-				if (*fmt == '0')
-					ftoken.zero = 1;
-				fmt++;
-			}
+			ft_printf_flags(&ftoken, &fmt);
 			if (*fmt >= '1' && *fmt <= '9')
 			{
 				ftoken.mfw = ft_atoi(fmt);
@@ -72,38 +54,13 @@ int		ft_printf(char *fmt, ...)
 			if (*fmt == '.')
 			{
 				fmt++;
-				ftoken.precision = ft_atoi(fmt);
-				fmt += ft_nlen_base(ftoken.precision, 10);
-			}
-			// FIND THE LEN MOD
-			while (*fmt == 'l' || *fmt == 'h' || *fmt == 'j' || *fmt == 'z')
-			{
-				if (*fmt == 'l')
+				if (*fmt >= '1' && *fmt <= '9')
 				{
-					if (*(fmt + 1) == 'l')
-					{
-						fmt++;
-						ftoken.ll = 1;
-					}
-					else
-						ftoken.l = 1;
+					ftoken.precision = ft_atoi(fmt);
+					fmt += ft_nlen_base(ftoken.precision, 10);
 				}
-				if (*fmt == 'h')
-				{
-					if (*(fmt + 1) == 'h')
-					{
-						fmt++;
-						ftoken.hh = 1;
-					}
-					else
-						ftoken.h = 1;
-				}
-				if (*fmt == 'j')
-					ftoken.j = 1;
-				if (*fmt == 'z')
-					ftoken.z = 1;
-				fmt++;
 			}
+			ft_printf_lenmod(&ftoken, &fmt);
 			// FIND THE ID
 			if (*fmt == 'c')
 			{
@@ -139,39 +96,7 @@ int		ft_printf(char *fmt, ...)
 				len += ft_putwchar(f.wc);
 			}
 			else if (*fmt == 'd' || *fmt == 'i')
-			{
-				fmt++;
-				if (ftoken.z || ftoken.l || ftoken.ll || ftoken.j)
-				{
-					f.ld = va_arg(ap, long);
-					len += ft_lldlen_base(f.ld, 10);
-					ft_putlong(f.ld);
-				}
-				else if (ftoken.hh)
-				{
-					f.sc = va_arg(ap, int);
-					len += ft_nlen_base(f.sc, 10);
-					ft_puthhd(f.sc);
-				}
-				else
-				{
-					f.d = va_arg(ap, int);
-					ftoken.cur_len = ft_nlen_base(f.d, 10);
-					if (ftoken.left)
-						ft_putnbr(f.d);
-					while (ftoken.cur_len < ftoken.mfw)
-					{
-						if (ftoken.zero)
-							ft_putchar('0');
-						else
-							ft_putchar(' ');
-						ftoken.cur_len++;
-					}
-					len += ftoken.cur_len;
-					if (!ftoken.left)
-						ft_putnbr(f.d);
-				}
-			}
+				len += ft_printf_d(&ftoken, &fmt, ap, f);
 			else if (*fmt == 'D')
 			{
 				fmt++;
@@ -261,7 +186,7 @@ int		ft_printf(char *fmt, ...)
 						len = len + ft_strlen(f.s);
 					}
 					else
-						len += printf("(null)");
+						len += ft_printf("(null)");
 				}
 			}
 			else if (*fmt == 'S')
@@ -281,49 +206,33 @@ int		ft_printf(char *fmt, ...)
 				len += ftoken.cur_len;
 			}
 			else if (*fmt == 'u')
-			{
-				fmt++;
-				if (ftoken.l || ftoken.z || ftoken.ll || ftoken.j)
-				{
-					f.ul = va_arg(ap, unsigned long);
-					len += ft_uld_len_base(f.ul, 10);
-					ft_putuld(f.ul);
-				}
-				else if (ftoken.hh)
-				{
-					f.uc = va_arg(ap, unsigned int);
-					len += ft_ud_len_base(f.uc, 10);
-					ft_putuhhd(f.uc);
-				}
-				else
-				{
-					f.ud = va_arg(ap, unsigned int);
-					len += ft_ud_len_base(f.ul, 10);
-					ft_putud(f.ud);
-				}
-			}
+				len += ft_printf_u(&ftoken, &fmt, ap, f);
 			else if (*fmt == 'U')
-			{
-				fmt++;
-				f.ul = va_arg(ap, unsigned long);
-				len += ft_uld_len_base(f.ul, 10);
-				ft_putuld(f.ul);
-			}
+				len += ft_printf_lu(&ftoken, &fmt, ap, f);
 			else if (*fmt == 'x')
 			{
 				fmt++;
 				if (ftoken.hh)
 				{
 					f.uc = va_arg(ap, unsigned int);
-					len += ft_nlen_base(f.uc, 16);
+					ftoken.cur_len = ft_nlen_base(f.uc, 16);
+					if (ftoken.mfw)
+						ftoken.cur_len +=
+						ft_putchar_times(ftoken.zero ? '0' : ' ',
+							   	ftoken.mfw - ftoken.cur_len);
 					ft_putstr(ft_uhhdtoa_base(f.uc, 16));
 				}
 				else
 				{
 					f.ull = va_arg(ap, unsigned long long);
-					len += ft_ulld_len_base(f.ull, 16);
+					ftoken.cur_len = ft_ulld_len_base(f.ull, 16);
+					if (ftoken.mfw)
+						ftoken.cur_len +=
+						ft_putchar_times(ftoken.zero ? '0' : ' ',
+							   	ftoken.mfw - ftoken.cur_len);
 					ft_putstr(ft_ulldtoa_base(f.ull, 16));
 				}
+				len += ftoken.cur_len;
 			}
 			else if (*fmt == 'X')
 			{

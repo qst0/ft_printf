@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 21:59:37 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/07 01:19:51 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/07 18:58:03 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,11 @@ union u_format
 	long				ld;
 	long long			lld;
 };
+
+int		ft_printf_d(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
+void	ft_printf_lenmod(t_ftoken *ftoken, char **fmt);
+void	ft_printf_flags(t_ftoken *ftoken, char **fmt);
+int		ft_printf_lu(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
+int		ft_printf_u(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
 
 #endif

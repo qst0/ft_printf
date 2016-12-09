@@ -6,11 +6,56 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/26 08:13:38 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/07 14:52:55 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/07 20:08:13 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_printf.h>
+
+void	ft_printf_flags(t_ftoken *ftoken, char **fmt)
+{
+	while (*(*fmt) == '#' || *(*fmt) == '-' || *(*fmt) == '+'
+			|| *(*fmt) == '0' || *(*fmt) == ' ')
+	{
+		if (*(*fmt) == '#')
+			ftoken->alt = 1;
+		else if (*(*fmt) == '-')
+			ftoken->left = 1;
+		else if (*(*fmt) == '+')
+			ftoken->sign = 1;
+		else if (*(*fmt) == ' ')
+			ftoken->space = 1;
+		else if (*(*fmt) == '0')
+			ftoken->zero = 1;
+		(*fmt)++;
+	}
+}
+
+void	ft_printf_lenmod(t_ftoken *ftoken, char **fmt)
+{
+	while (*(*fmt) == 'l' || *(*fmt) == 'h' || *(*fmt) == 'j' || *(*fmt) == 'z')
+	{
+		if (*(*fmt) == 'l' && *((*fmt) + 1) == 'l')
+		{
+			ftoken->ll = 1;
+			(*fmt)++;
+		}
+		else if (*(*fmt) == 'l')
+			ftoken->l = 1;
+		if (*(*fmt) == 'h' && *((*fmt) + 1) == 'h')
+		{
+			(*fmt)++;
+			ftoken->hh = 1;
+		}
+		else if (*(*fmt) == 'h')
+			ftoken->h = 1;
+		if (*(*fmt) == 'j')
+			ftoken->j = 1;
+		if (*(*fmt) == 'z')
+			ftoken->z = 1;
+		(*fmt)++;
+	}
+}
 
 int			ft_atoi(const char *str)
 {
@@ -615,4 +660,77 @@ void	ft_putud(unsigned int u)
 		ft_putchar('0');
 	else
 		ft_putud_r(u);
+}
+
+int		ft_printf_u(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
+{
+	(*fmt)++;
+	if (ftoken->l || ftoken->z || ftoken->ll || ftoken->j)
+	{
+		f.ul = va_arg(ap, unsigned long);
+		ftoken->cur_len = ft_uld_len_base(f.ul, 10);
+		ft_putuld(f.ul);
+	}
+	else if (ftoken->hh)
+	{
+		f.uc = va_arg(ap, unsigned int);
+		ftoken->cur_len = ft_ud_len_base(f.uc, 10);
+		ft_putuhhd(f.uc);
+	}
+	else
+	{
+		f.ud = va_arg(ap, unsigned int);
+		ftoken->cur_len = ft_ud_len_base(f.ul, 10);
+		ft_putud(f.ud);
+	}
+	return (ftoken->cur_len);
+}
+
+int		ft_printf_lu(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
+{
+	(*fmt)++;
+	f.ul = va_arg(ap, unsigned long);
+	ftoken->cur_len = ft_uld_len_base(f.ul, 10);
+	ft_putuld(f.ul);
+	return (ftoken->cur_len);
+}
+
+int		ft_printf_d(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
+{
+	(*fmt)++;
+	if (ftoken->z || ftoken->l || ftoken->ll || ftoken->j)
+	{
+		f.ld = va_arg(ap, long);
+		ftoken->cur_len = ft_lldlen_base(f.ld, 10);
+		ft_putlong(f.ld);
+	}
+	else if (ftoken->hh)
+	{
+		f.sc = va_arg(ap, int);
+		ftoken->cur_len = ft_nlen_base(f.sc, 10);
+		ft_puthhd(f.sc);
+	}
+	else
+	{
+		f.d = va_arg(ap, int);
+		ftoken->cur_len = ft_nlen_base(f.d, 10);
+		if (ftoken->left)
+			ft_putnbr(f.d);
+		if (!ftoken->left && ftoken->zero && f.d < 0)
+		{
+			ft_putchar('-');
+			f.d = -f.d;
+		}
+		while (ftoken->cur_len < ftoken->mfw)
+		{
+			if (ftoken->zero)
+				ft_putchar('0');
+			else
+				ft_putchar(' ');
+			ftoken->cur_len++;
+		}
+		if (!ftoken->left)
+			ft_putnbr(f.d);
+	}
+	return (ftoken->cur_len);
 }

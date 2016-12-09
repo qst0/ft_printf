@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 21:59:37 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/07 14:51:24 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/07 20:51:39 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int			main(int argc, char **argv)
 	ptr = &argc;
 
 
-	printf("%d\n", ft_printf("{%-15Z}", 123));
+	printf("%d\n", printf("%.4d", 42));
 	//printf("%d\n", ft_printf("{%10R}", 42));
 //	ft_printf("{%10R}");
 

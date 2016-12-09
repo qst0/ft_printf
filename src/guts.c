@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/26 08:13:38 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/07 20:08:13 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/09 02:23:48 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -716,6 +716,10 @@ int		ft_printf_d(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
 		ftoken->cur_len = ft_nlen_base(f.d, 10);
 		if (ftoken->left)
 			ft_putnbr(f.d);
+		if (ftoken->sign && f.d > -1)
+			ftoken->cur_len += ft_printf("+");
+		else if (ftoken->space && f.d > -1)
+			ftoken->cur_len += ft_printf(" ");
 		if (!ftoken->left && ftoken->zero && f.d < 0)
 		{
 			ft_putchar('-');
@@ -723,7 +727,7 @@ int		ft_printf_d(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
 		}
 		while (ftoken->cur_len < ftoken->mfw)
 		{
-			if (ftoken->zero)
+			if (ftoken->zero && !ftoken->left)
 				ft_putchar('0');
 			else
 				ft_putchar(' ');

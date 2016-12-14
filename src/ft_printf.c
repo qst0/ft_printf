@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/25 15:25:11 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/09 02:15:42 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/13 17:42:33 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,8 @@ int		ft_printf(char *fmt, ...)
 	while (*fmt)
 	{
 		if (*fmt == '%')
-		{	
-			fmt++;
-			ft_printf_flags(&ftoken, &fmt);
-			if (*fmt >= '1' && *fmt <= '9')
-			{
-				ftoken.mfw = ft_atoi(fmt);
-				fmt += ft_nlen_base(ftoken.mfw, 10);
-			}
-			if (*fmt == '.')
-			{
-				fmt++;
-				if (*fmt >= '1' && *fmt <= '9')
-				{
-					ftoken.precision = ft_atoi(fmt);
-					fmt += ft_nlen_base(ftoken.precision, 10);
-				}
-			}
-			ft_printf_lenmod(&ftoken, &fmt);
+		{
+			ft_printf_mfw(&ftoken, &fmt);
 			// FIND THE ID
 			if (*fmt == 'c')
 			{
@@ -82,7 +66,10 @@ int		ft_printf(char *fmt, ...)
 					ftoken.cur_len = 1; 
 					while (ftoken.cur_len < ftoken.mfw)
 					{
-						ft_putchar(' ');
+						if (ftoken.zero)
+							ft_putchar('0');
+						else
+							ft_putchar(' ');
 						ftoken.cur_len++;
 					}
 					write(1, &f.c, 1);
@@ -104,28 +91,6 @@ int		ft_printf(char *fmt, ...)
 				len += ft_lldlen_base(f.ld, 10);
 				ft_putlong(f.ld);
 			}
-			else if (*fmt == 'o' && ftoken.alt)
-			{
-				fmt++;
-				if (ftoken.l || ftoken.z || ftoken.ll || ftoken.j)
-				{
-					f.ul = va_arg(ap, unsigned long);
-					len += ft_uld_len_base(f.ul, 8);
-					ft_putstr(ft_uldtoa_base_alt(f.ul, 8));
-				}
-				else if (ftoken.hh)
-				{
-					f.uc = va_arg(ap, unsigned int);
-					len += ft_nlen_base(f.uc, 8);
-					ft_putstr(ft_uhhdtoa_base_alt(f.uc, 8));
-				}
-				else
-				{
-					f.ud = va_arg(ap, unsigned int);
-					len += ft_ud_len_base(f.ud, 8);
-					ft_putstr(ft_udtoa_base_alt(f.ud, 8));
-				}
-			}
 			else if (*fmt == 'o')
 			{
 				fmt++;
@@ -145,6 +110,11 @@ int		ft_printf(char *fmt, ...)
 				{
 					f.ud = va_arg(ap, unsigned int);
 					len += ft_ud_len_base(f.ud, 8);
+					if (ftoken.alt && f.ud != 0)
+					{
+						len++;
+						write(1, "0", 1);
+					}
 					ft_putstr(ft_udtoa_base(f.ud, 8));
 				}
 			}
@@ -153,41 +123,45 @@ int		ft_printf(char *fmt, ...)
 				fmt++;
 				f.ul = va_arg(ap, unsigned long);
 				len += ft_uld_len_base(f.ul, 8);
+				if (ftoken.alt && f.ud != 0)
+				{
+					len++;
+					write(1, "0", 1);
+				}
 				ft_putstr(ft_uldtoa_base(f.ul, 8));
 			}
 			else if (*fmt == 'p')
-			{	
-				fmt++;
-				f.ld = va_arg(ap, long);
-				ftoken.cur_len = ft_lldlen_base(f.ld, 16) + 2;
-				if (ftoken.left)
-					ft_printf("0x%s",ft_itoa_base(f.ld, 16));
-				ft_putchar_times(' ', ftoken.mfw - ftoken.cur_len);
-				while (ftoken.cur_len < ftoken.mfw)
-					ftoken.cur_len++;
-				if (!ftoken.left)
-					ft_printf("0x%s",ft_itoa_base(f.ld, 16));
-				len += ftoken.cur_len;
-			}
+				len += ft_printf_p(&ftoken, &fmt, ap, f);
 			else if (*fmt == 's')
 			{
 				fmt++;
 				if (ftoken.l)
 				{
 					f.ws = va_arg(ap, wchar_t*);
-					len += ft_putwstr(f.ws);
+					ftoken.cur_len = ft_putwstr(f.ws);
 				}
 				else
 				{
 					f.s = va_arg(ap, char*);
 					if (f.s)
 					{
-						write(1, f.s, ft_strlen(f.s));
-						len = len + ft_strlen(f.s);
+						ftoken.cur_len = ft_strlen(f.s);
+						if (ftoken.mfw)
+						ftoken.cur_len +=
+						ft_putchar_times(ftoken.zero ? '0' : ' ',
+							   	ftoken.mfw - ftoken.cur_len);
+						write(1, f.s, ftoken.precision ? ftoken.precision
+								: ft_strlen(f.s));
+						if (ftoken.precision)
+							ftoken.cur_len =
+							   	ftoken.precision + ftoken.mfw - ftoken.cur_len;
 					}
 					else
-						len += ft_printf("(null)");
+					{
+						ftoken.cur_len = ft_printf("(null)");
+					}
 				}
+				len += ftoken.cur_len;
 			}
 			else if (*fmt == 'S')
 			{
@@ -198,7 +172,10 @@ int		ft_printf(char *fmt, ...)
 					ft_putwstr(f.ws);
 				while (ftoken.cur_len < ftoken.mfw)
 				{
-					ft_putchar(' ');
+					if (ftoken.zero)
+						ft_putchar('0');
+					else
+						ft_putchar(' ');
 					ftoken.cur_len++;
 				}
 				if (!ftoken.left)
@@ -220,6 +197,8 @@ int		ft_printf(char *fmt, ...)
 						ftoken.cur_len +=
 						ft_putchar_times(ftoken.zero ? '0' : ' ',
 							   	ftoken.mfw - ftoken.cur_len);
+					if (ftoken.alt && f.uc)
+						ftoken.cur_len += ft_printf("0x");
 					ft_putstr(ft_uhhdtoa_base(f.uc, 16));
 				}
 				else
@@ -230,6 +209,8 @@ int		ft_printf(char *fmt, ...)
 						ftoken.cur_len +=
 						ft_putchar_times(ftoken.zero ? '0' : ' ',
 							   	ftoken.mfw - ftoken.cur_len);
+					if (ftoken.alt && f.ull)
+						ftoken.cur_len += ft_printf("0x");
 					ft_putstr(ft_ulldtoa_base(f.ull, 16));
 				}
 				len += ftoken.cur_len;
@@ -240,14 +221,27 @@ int		ft_printf(char *fmt, ...)
 				if (ftoken.hh)
 				{
 					f.uc = va_arg(ap, unsigned int);
-					len += ft_nlen_base(f.uc, 16);
+					ftoken.cur_len = ft_nlen_base(f.uc, 16);
 					ft_putstr(ft_uhhdtoa_base_alt(f.uc, 16));
 				} else
 				{
 					f.ull = va_arg(ap, unsigned long long);
-					len += ft_ulld_len_base(f.ull, 16);
+					ftoken.cur_len = ft_ulld_len_base(f.ull, 16);
+					while ((ftoken.cur_len < ftoken.mfw)
+							|| ftoken.cur_len < ftoken.precision)
+					{
+						if ((ftoken.cur_len < ftoken.precision) ||
+									(ftoken.zero && !ftoken.left))
+							ft_putchar('0');
+						else
+							ft_putchar(' ');
+						ftoken.cur_len++;
+					}
+					if (ftoken.alt && f.ull)
+						ftoken.cur_len += ft_printf("0X");
 					ft_putstr(ft_ulldtoa_base_alt(f.ull, 16));
 				}
+				len += ftoken.cur_len;
 			}
 			else if (*fmt == '%')
 			{	

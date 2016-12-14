@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 21:59:37 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/09 02:24:33 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/13 04:09:16 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <stdio.h>
 #include <limits.h>
+#include <locale.h>
 
 int			main(int argc, char **argv)
 {
@@ -29,9 +30,58 @@ int			main(int argc, char **argv)
 
 	ptr = &argc;
 
-	ft_printf("{%03.2d}", 0);
+	setlocale(LC_ALL, "");
+
+	printf("Lib:\n");
+	printf("%d\n", printf("%.4s", "42 is the answer"));
+	printf("%.4s", "42 is the answer");
+	printf("\n");
+	ft_printf("You:\n");
+	ft_printf("%d\n", ft_printf("%.4s", "42 is the answer"));
+	ft_printf("%.4s", "42 is the answer");
+	ft_printf("\n");
+
+	/* ZERO PRECSISION MAKES NO PRINT WTF HOW TO FIX
+	printf("Lib:\n");
+	printf("%.d, %.0d", 0, 0);
+	printf("\n");
+	ft_printf("You:\n");
+	ft_printf("%.d, %.0d", 0, 0);
+	ft_printf("\n");
+	*/
+
+/*
+	printf("Lib:\n");
+	printf("%15.4d", -42);
+	printf("\n");
+	ft_printf("You:\n");
+	ft_printf("%15.4d", -42);
+	ft_printf("\n");
+*/
+
+/*
+	printf("%#x", 42);
+	printf("\n");
+	ft_printf("%#x", 42);
+ft_printf("\n");
+*/
+/*	
+	printf("{%050p}", ptr);
+	printf("\n");
+	ft_printf("{%050p}", ptr);
+	ft_printf("\n");
+*/	
+	/*
+	printf("Lib:\n");
+	printf("%03.2d", 0);
+	printf("\n");
+	ft_printf("You:\n");
+	ft_printf("%03.2d", 0);
+	ft_printf("\n");
+	*/
+	
 	//printf("%d\n", ft_printf("{%10R}", 42));
-//	ft_printf("{%10R}");
+	//	ft_printf("{%10R}");
 
 	/*
 	printf("%d\n", printf("{%-15d}", 0));

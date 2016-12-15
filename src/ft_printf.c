@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/25 15:25:11 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/14 21:56:19 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/14 22:53:33 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int		ft_printf(char *fmt, ...)
 		else
 		{
 			len += write(1, fmt, 1);
-			fmt++;
 			while (ftoken.left && len <= ftoken.mfw)
 				len += write(1, " ", 1);
+			fmt++;
 		}
 	}
 	return (len);

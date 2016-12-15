@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 21:59:37 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/13 04:09:16 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/14 22:50:39 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@ int			main(int argc, char **argv)
 	setlocale(LC_ALL, "");
 
 	printf("Lib:\n");
+	printf("%d\n", printf("{%10R}"));
+	printf("%.4s", "42 is the answer");
+	printf("\n");
+	ft_printf("You:\n");
+	ft_printf("%d\n", ft_printf("{%10R}"));
+	ft_printf("%.4s", "42 is the answer");
+	ft_printf("\n");
+
+	/*
+	printf("Lib:\n");
 	printf("%d\n", printf("%.4s", "42 is the answer"));
 	printf("%.4s", "42 is the answer");
 	printf("\n");
@@ -40,6 +50,7 @@ int			main(int argc, char **argv)
 	ft_printf("%d\n", ft_printf("%.4s", "42 is the answer"));
 	ft_printf("%.4s", "42 is the answer");
 	ft_printf("\n");
+	*/
 
 	/* ZERO PRECSISION MAKES NO PRINT WTF HOW TO FIX
 	printf("Lib:\n");

@@ -6,7 +6,7 @@
 #    By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/28 14:52:14 by myoung            #+#    #+#              #
-#    Updated: 2016/12/14 20:12:53 by myoung           ###   ########.fr        #
+#    Updated: 2016/12/14 22:31:35 by myoung           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CFLAGS = -Wall -Wextra -Werror
 AR = ar
 INC = -I ./include
 
-MAIN = src/main.c
+MAIN = testing_main.c
 
 FILES = ft_printf.c printf_format.c \
 		printf_d.c printf_xsp.c printf_cou.c \
@@ -38,7 +38,6 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(AR) crs $@ $^
-	$(CC) $@ $(MAIN) $(INC)
 	echo "Creating $(NAME)"
 
 build/%.o: src/%.c | build
@@ -58,6 +57,7 @@ fclean: clean
 
 test:
 	make re
+	$(CC) $(NAME) $(MAIN) $(INC)
 	./a.out
 
 re: fclean all

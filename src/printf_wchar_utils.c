@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 20:03:29 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/14 20:03:43 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/14 21:58:36 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int		ft_wstr_len(wchar_t *ws)
 int		ft_putwstr(wchar_t *ws)
 {
 	int len;
-	if(!ws)
+
+	if (!ws)
 		return (ft_printf("(null)"));
 	len = 0;
 	while (*ws)

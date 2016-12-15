@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 19:48:34 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/14 19:49:10 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/14 21:58:00 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		ft_printf_c(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
 	else
 	{
 		f.c = va_arg(ap, int);
-		ftoken->cur_len = 1; 
+		ftoken->cur_len = 1;
 		while (ftoken->cur_len < ftoken->mfw)
 		{
 			if (ftoken->zero)
@@ -113,4 +113,3 @@ int		ft_printf_lo(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
 	ft_putstr(ft_uldtoa_base(f.ul, 8));
 	return (ftoken->cur_len);
 }
-

@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 19:46:48 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/14 19:47:09 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/14 20:41:44 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,33 +88,33 @@ int		ft_printf_x(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
 	return (ftoken->cur_len);
 }
 
-int		ft_printf_lx(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
+int		ft_printf_lx(t_ftoken *ft, char **fmt, va_list ap, union u_format f)
 {
 	(*fmt)++;
-	if (ftoken->hh)
+	if (ft->hh)
 	{
 		f.uc = va_arg(ap, unsigned int);
-		ftoken->cur_len = ft_nlen_base(f.uc, 16);
+		ft->cur_len = ft_nlen_base(f.uc, 16);
 		ft_putstr(ft_uhhdtoa_base_alt(f.uc, 16));
-	} else
+	}
+	else
 	{
 		f.ull = va_arg(ap, unsigned long long);
-		ftoken->cur_len = ft_ulld_len_base(f.ull, 16);
-		while ((ftoken->cur_len < ftoken->mfw)
-				|| ftoken->cur_len < ftoken->precision)
+		ft->cur_len = ft_ulld_len_base(f.ull, 16);
+		while ((ft->cur_len < ft->mfw) || ft->cur_len < ft->precision)
 		{
-			if ((ftoken->cur_len < ftoken->precision) ||
-					(ftoken->zero && !ftoken->left))
+			if ((ft->cur_len < ft->precision) ||
+					(ft->zero && !ft->left))
 				ft_putchar('0');
 			else
 				ft_putchar(' ');
-			ftoken->cur_len++;
+			ft->cur_len++;
 		}
-		if (ftoken->alt && f.ull)
-			ftoken->cur_len += ft_printf("0X");
+		if (ft->alt && f.ull)
+			ft->cur_len += ft_printf("0X");
 		ft_putstr(ft_ulldtoa_base_alt(f.ull, 16));
 	}
-	return (ftoken->cur_len);
+	return (ft->cur_len);
 }
 
 int		ft_printf_p(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
@@ -125,10 +125,10 @@ int		ft_printf_p(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
 	if (ftoken->zero)
 		ft_putstr("0x");
 	if (ftoken->left && !ftoken->zero)
-		ft_printf("0x%s",ft_itoa_base(f.ld, 16));
+		ft_printf("0x%s", ft_itoa_base(f.ld, 16));
 	while (ftoken->cur_len < ftoken->mfw)
 	{
-		if(ftoken->zero)
+		if (ftoken->zero)
 			ft_putchar('0');
 		else
 			ft_putchar(' ');
@@ -137,6 +137,6 @@ int		ft_printf_p(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f)
 	if (ftoken->zero)
 		ft_putstr(ft_itoa_base(f.ld, 16));
 	if (!ftoken->left && !ftoken->zero)
-		ft_printf("0x%s",ft_itoa_base(f.ld, 16));
+		ft_printf("0x%s", ft_itoa_base(f.ld, 16));
 	return (ftoken->cur_len);
 }

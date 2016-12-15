@@ -6,19 +6,20 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 19:56:57 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/14 19:57:11 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/14 22:24:20 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_printf.h>
 
-char 	*ft_ulldtoa_base(unsigned long long value, int base)
+char		*ft_ulldtoa_base(unsigned long long value, int base)
 {
-	char		hex[17] = "0123456789abcdef";
-	char		*result;
-	unsigned long long	n = value;
-	int			len;
+	static char			*hex = "0123456789abcdef";
+	char				*result;
+	unsigned long long	n;
+	int					len;
 
+	n = value;
 	if (value == 0)
 		return ("0");
 	len = ft_ulld_len_base(n, base);
@@ -32,13 +33,14 @@ char 	*ft_ulldtoa_base(unsigned long long value, int base)
 	return (result);
 }
 
-char 	*ft_uldtoa_base(unsigned long value, int base)
+char		*ft_uldtoa_base(unsigned long value, int base)
 {
-	char		hex[17] = "0123456789abcdef";
-	char		*result;
-	unsigned long long	n = value;
-	int			len;
+	static char			*hex = "0123456789abcdef";
+	char				*result;
+	unsigned long long	n;
+	int					len;
 
+	n = value;
 	if (value == 0)
 		return ("0");
 	len = ft_uld_len_base(n, base);
@@ -52,13 +54,14 @@ char 	*ft_uldtoa_base(unsigned long value, int base)
 	return (result);
 }
 
-char 	*ft_lldtoa_base(long long value, int base)
+char		*ft_lldtoa_base(long long value, int base)
 {
-	char		hex[17] = "0123456789abcdef";
-	char		*result;
-	long long	n = value;
-	int			len;
+	static char			*hex = "0123456789abcdef";
+	char				*result;
+	long long			n;
+	int					len;
 
+	n = value;
 	if (value == 0)
 		return ("0");
 	if (value < 0)
@@ -78,13 +81,14 @@ char 	*ft_lldtoa_base(long long value, int base)
 	return (result);
 }
 
-char 	*ft_uhhdtoa_base(unsigned char value, int base)
+char		*ft_uhhdtoa_base(unsigned char value, int base)
 {
-	char		hex[17] = "0123456789abcdef";
-	char		*result;
-	long long	n = value;
-	int			len;
+	static char			*hex = "0123456789abcdef";
+	char				*result;
+	long long			n;
+	int					len;
 
+	n = value;
 	if (value == 0)
 		return ("0");
 	len = ft_nlen_base(n, base);
@@ -98,13 +102,14 @@ char 	*ft_uhhdtoa_base(unsigned char value, int base)
 	return (result);
 }
 
-char 	*ft_ulldtoa_base_alt(unsigned long long value, int base)
+char		*ft_ulldtoa_base_alt(unsigned long long value, int base)
 {
-	char		hex[17] = "0123456789ABCDEF";
-	char		*result;
-	unsigned long long	n = value;
-	int			len;
+	static char			*hex = "0123456789ABCDEF";
+	char				*result;
+	unsigned long long	n;
+	int					len;
 
+	n = value;
 	if (value == 0)
 		return ("0");
 	len = ft_ulld_len_base(n, base);

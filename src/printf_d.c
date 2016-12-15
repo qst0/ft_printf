@@ -6,18 +6,18 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 19:39:49 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/14 19:40:20 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/14 21:57:24 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_printf.h>
 
 void	ft_printf_d2_edge(t_ftoken *ftoken, union u_format f)
-{	
+{
 	if (ftoken->sign && f.d > -1)
 		ftoken->cur_len += write(1, "+", 1);
 	else if (ftoken->space && f.d > -1)
-		ftoken->cur_len += write(1, " ", 1);	
+		ftoken->cur_len += write(1, " ", 1);
 }
 
 void	ft_printf_d2(t_ftoken *ftoken, union u_format f)
@@ -59,7 +59,7 @@ void	ft_printf_d_default(t_ftoken *ft, va_list ap, union u_format f)
 		ft_putchar_times('0', ft->precision);
 		ft_putnbr(f.d);
 	}
-	ft_printf_d2(ft, f);	
+	ft_printf_d2(ft, f);
 }
 
 int		ft_printf_d(t_ftoken *ft, char **fmt, va_list ap, union u_format f)
@@ -81,4 +81,3 @@ int		ft_printf_d(t_ftoken *ft, char **fmt, va_list ap, union u_format f)
 		ft_printf_d_default(ft, ap, f);
 	return (ft->cur_len);
 }
-

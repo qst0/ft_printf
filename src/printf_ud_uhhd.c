@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 20:10:43 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/14 20:11:09 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/14 20:30:05 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	ft_putuhhd(unsigned char n)
 	else
 		ft_putuhhd_r(n);
 }
+
 void	ft_putud_r(unsigned int u)
 {
 	if (u)

@@ -6,7 +6,7 @@
 #    By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/28 14:52:14 by myoung            #+#    #+#              #
-#    Updated: 2016/12/03 13:53:44 by myoung           ###   ########.fr        #
+#    Updated: 2016/12/14 20:12:53 by myoung           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,14 @@ INC = -I ./include
 
 MAIN = src/main.c
 
-FILES = guts.c ft_printf.c
+FILES = ft_printf.c printf_format.c \
+		printf_d.c printf_xsp.c printf_cou.c \
+		printf_utils.c printf_len_base.c \
+		printf_toa_base_1.c printf_toa_base_2.c \
+		printf_strlen_str_char.c \
+		printf_wchar.c printf_wchar_utils.c \
+		printf_lld.c printf_ulld.c \
+		printf_d_hhd.c printf_ud_uhhd.c
 
 OBJ = $(addprefix build/, $(FILES:.c=.o))
 SRC = $(addprefix src/, $(FILES))

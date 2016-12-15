@@ -1,37 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   printf_ud_uhhd.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/25 15:25:11 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/13 19:59:48 by myoung           ###   ########.fr       */
+/*   Created: 2016/12/14 20:10:43 by myoung            #+#    #+#             */
+/*   Updated: 2016/12/14 20:11:09 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_printf.h>
 
-int		ft_printf(char *fmt, ...)
+void	ft_putuhhd_r(unsigned char n)
 {
-	va_list			ap;
-	int				len;
-	t_ftoken		ftoken;
+	if (n)
+		ft_putuhhd_r(n / 10);
+	if (n)
+		ft_putchar((n % 10) + '0');
+}
 
-	va_start(ap, fmt);
-	ft_ftoken_reset(&ftoken);
-	len = 0;
-	while (*fmt)
-	{
-		if (*fmt == '%')
-			len += ft_printf_format(&ftoken, &fmt, ap);
-		else
-		{
-			len += write(1, fmt, 1);
-			fmt++;
-			while (ftoken.left && len <= ftoken.mfw)
-				len += write(1, " ", 1);
-		}
-	}
-	return(len);
+void	ft_putuhhd(unsigned char n)
+{
+	if (n == 0)
+		ft_putchar('0');
+	else
+		ft_putuhhd_r(n);
+}
+void	ft_putud_r(unsigned int u)
+{
+	if (u)
+		ft_putud_r(u / 10);
+	if (u)
+		ft_putchar((u % 10) + '0');
+}
+
+void	ft_putud(unsigned int u)
+{
+	if (u == 0)
+		ft_putchar('0');
+	else
+		ft_putud_r(u);
 }

@@ -1,37 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   printf_strlen_str_char.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/25 15:25:11 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/13 19:59:48 by myoung           ###   ########.fr       */
+/*   Created: 2016/12/14 20:00:49 by myoung            #+#    #+#             */
+/*   Updated: 2016/12/14 20:02:06 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_printf.h>
 
-int		ft_printf(char *fmt, ...)
+int		ft_strlen(char *str)
 {
-	va_list			ap;
-	int				len;
-	t_ftoken		ftoken;
+	return (*str ? 1 + ft_strlen(++str) : 0);
+}
 
-	va_start(ap, fmt);
-	ft_ftoken_reset(&ftoken);
-	len = 0;
-	while (*fmt)
+void	ft_putstr(char *str)
+{
+	write(1, str, ft_strlen(str));
+}
+
+int		ft_putchar_times(int c, int times)
+{
+	int i;
+
+	i = 0;
+	while (i < times)
 	{
-		if (*fmt == '%')
-			len += ft_printf_format(&ftoken, &fmt, ap);
-		else
-		{
-			len += write(1, fmt, 1);
-			fmt++;
-			while (ftoken.left && len <= ftoken.mfw)
-				len += write(1, " ", 1);
-		}
+		write(1, &c, 1);
+		i++;
 	}
-	return(len);
+	return (times);
+}
+
+void	ft_putchar(int c)
+{
+	write(1, &c, 1);
 }

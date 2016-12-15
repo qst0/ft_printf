@@ -6,7 +6,7 @@
 /*   By: myoung <myoung@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 21:59:37 by myoung            #+#    #+#             */
-/*   Updated: 2016/12/13 17:42:18 by myoung           ###   ########.fr       */
+/*   Updated: 2016/12/13 19:54:48 by myoung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,23 @@ union u_format
 	long long			lld;
 };
 
-int		ft_printf_d(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
+void	ft_ftoken_reset(t_ftoken *ftoken);
+void		ft_printf_mfw(t_ftoken *ftoken, char **fmt);
 void	ft_printf_lenmod(t_ftoken *ftoken, char **fmt);
 void	ft_printf_flags(t_ftoken *ftoken, char **fmt);
+
+int		ft_printf_d(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
 int		ft_printf_lu(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
 int		ft_printf_u(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
 int		ft_printf_p(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
-void		ft_printf_mfw(t_ftoken *ftoken, char **fmt);
+int		ft_printf_c(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
+int		ft_printf_lo(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
+int		ft_printf_o(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
+int		ft_printf_s(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
+int		ft_printf_ls(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
+int		ft_printf_x(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
+int		ft_printf_lx(t_ftoken *ftoken, char **fmt, va_list ap, union u_format f);
+
+int		ft_printf_format(t_ftoken *ftoken, char **fmt, va_list ap);
 
 #endif
